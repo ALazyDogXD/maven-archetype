@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="common-mybatis-plus" />
+        <module name="common-minio" />
+        <module name="common-redisson" />
+        <module name="common-knife4j" />
+        <module name="common-base" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common-mybatis-puls" target="8" />
+      <module name="common-redis" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
