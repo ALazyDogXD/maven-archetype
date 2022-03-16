@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common-mybatis-plus" />
-        <module name="common-minio" />
-        <module name="common-redisson" />
         <module name="common-knife4j" />
+        <module name="common-minio" />
         <module name="common-base" />
+        <module name="common-redisson" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

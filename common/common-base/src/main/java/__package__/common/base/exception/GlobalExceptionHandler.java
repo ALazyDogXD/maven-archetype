@@ -1,6 +1,5 @@
-package __package__.common.base.config;
+package __package__.common.base.exception;
 
-import __package__.common.base.exception.ServiceException;
 import __package__.common.base.resp.ResponseMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @description 基础服务配置
  */
 @SuppressWarnings("all")
-@ComponentScan("com.alazydogxd.common.base")
+@ComponentScan("__package__.common.base")
 @Configuration
 public class BaseCommonAutoConfiguration {
 }
