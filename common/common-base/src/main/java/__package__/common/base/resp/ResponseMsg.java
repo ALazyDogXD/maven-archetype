@@ -2,7 +2,8 @@ package __package__.common.base.resp;
 
 import org.springframework.util.StringUtils;
 
-import static __package__.common.base.resp.ResponseEnum.*;
+import static __package__.common.base.resp.ResponseEnum.FAIL;
+import static __package__.common.base.resp.ResponseEnum.SUCCESS;
 
 /**
  * @author ALazyDogXD

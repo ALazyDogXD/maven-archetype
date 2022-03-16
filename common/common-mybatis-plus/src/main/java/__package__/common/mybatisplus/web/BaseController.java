@@ -70,7 +70,7 @@ public class BaseController {
     }
 
     private Integer toInt(String v) {
-        if (StringUtils.isEmpty(v)){
+        if (StringUtils.isEmpty(v)) {
             return null;
         } else {
             try {
@@ -82,7 +82,7 @@ public class BaseController {
     }
 
     private Boolean toBool(String v) {
-        if (StringUtils.isEmpty(v)){
+        if (StringUtils.isEmpty(v)) {
             return null;
         } else {
             return Boolean.parseBoolean(v);

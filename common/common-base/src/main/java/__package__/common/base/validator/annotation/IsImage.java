@@ -20,16 +20,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy ={ImageValidator.class})
+@Constraint(validatedBy = {ImageValidator.class})
 public @interface IsImage {
 
     // 当验证不通过时的提示信息
     String message() default "请上传合法的图片文件";
 
     // 约束注解在验证时所属的组别
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
     // 负载
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 
 }

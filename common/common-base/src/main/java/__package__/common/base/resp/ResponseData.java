@@ -10,7 +10,7 @@ public class ResponseData<T> extends ResponseBase {
 
     private T data;
 
-    public static <T> ResponseData<T> success(T data){
+    public static <T> ResponseData<T> success(T data) {
         ResponseData<T> resp = new ResponseData<>();
         resp.code = 200;
         resp.data = data;

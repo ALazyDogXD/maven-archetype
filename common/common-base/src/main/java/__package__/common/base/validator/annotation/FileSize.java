@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy ={FileSizeValidator.class})
+@Constraint(validatedBy = {FileSizeValidator.class})
 public @interface FileSize {
 
     // 图片大小限制 (byte)
@@ -30,9 +30,9 @@ public @interface FileSize {
     String message() default "文件过大";
 
     // 约束注解在验证时所属的组别
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
     // 负载
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 
 }

@@ -8,10 +8,14 @@ package __package__.common.base.validator.group;
 
 public interface Group {
 
-    /** 参数校验分组-创建 */
+    /**
+     * 参数校验分组-创建
+     */
     Class<?> CREATE = Create.class;
 
-    /** 参数校验分组-修改 */
+    /**
+     * 参数校验分组-修改
+     */
     Class<?> MODIFY = Modify.class;
 
 }

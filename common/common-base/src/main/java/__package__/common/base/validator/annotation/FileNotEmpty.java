@@ -20,15 +20,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy ={FileValidator.class})
+@Constraint(validatedBy = {FileValidator.class})
 public @interface FileNotEmpty {
 
     // 当验证不通过时的提示信息
     String message() default "文件不可为空";
 
     // 约束注解在验证时所属的组别
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
     // 负载
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 }
