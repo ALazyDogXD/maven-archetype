@@ -1,4 +1,4 @@
 # Auto Configure
 # suppress inspection "SpellCheckingInspection"
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-__package__.common.mybatisplus.config.MybatisPlusCommonAutoConfiguration
+__package__.common.mybatisplus.CommonMybatisPlusAutoConfiguration

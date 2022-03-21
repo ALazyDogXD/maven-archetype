@@ -1,13 +1,13 @@
-package __package__.common.mybatisplus.config;
+package __package__.common.mybatisplus;
 
 import __package__.common.mybatisplus.handler.MetaHandler;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Mr_W
@@ -15,10 +15,9 @@ import org.springframework.context.annotation.Configuration;
  * @description 基础服务配置
  */
 
-@SuppressWarnings("SpellCheckingInspection")
-@Configuration
-@ComponentScan("__package__.common.mybatisplus")
-public class MybatisPlusCommonAutoConfiguration {
+@ComponentScan
+@EnableAutoConfiguration
+public class CommonMybatisPlusAutoConfiguration {
 
     /**
      * 分页插件

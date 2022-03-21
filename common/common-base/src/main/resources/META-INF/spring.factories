@@ -1,4 +1,4 @@
 # Auto Configure
 # suppress inspection "SpellCheckingInspection"
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-__package__.common.base.config.BaseCommonAutoConfiguration
+__package__.common.base.CommonBaseAutoConfiguration

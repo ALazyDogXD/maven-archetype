@@ -1,5 +1,6 @@
-package __package__.common.base.config;
+package __package__.common.base;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021/2/27 19:44
  * @description 基础服务配置
  */
-@SuppressWarnings("all")
-@ComponentScan("__package__.common.base")
-@Configuration
-public class BaseCommonAutoConfiguration {
+
+@ComponentScan
+@EnableAutoConfiguration
+public class CommonBaseAutoConfiguration {
 }

@@ -1,10 +1,10 @@
 package __package__.common.minio.util;
 
+import __package__.common.minio.config.MinioProperties;
 import io.minio.MinioClient;
 import io.minio.Result;
 import io.minio.errors.*;
 import io.minio.messages.Item;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -28,33 +28,7 @@ public class MinIoUtil {
 
     private volatile static MinioClient MINIO_CLIENT;
 
-    private static String endpoint;
-
-    private static int port;
-
-    private static String accessKey;
-
-    private static String secretKey;
-
-    @Value("${minio.endpoint}")
-    public void setEndpoint(String endpoint) {
-        MinIoUtil.endpoint = endpoint;
-    }
-
-    @Value("${minio.port}")
-    public void setPort(int port) {
-        MinIoUtil.port = port;
-    }
-
-    @Value("${minio.accessKey}")
-    public void setAccessKey(String accessKey) {
-        MinIoUtil.accessKey = accessKey;
-    }
-
-    @Value("${minio.secretKey}")
-    public void setSecretKey(String secretKey) {
-        MinIoUtil.secretKey = secretKey;
-    }
+    private static MinioProperties minioProperties;
 
     private MinIoUtil() {
     }
@@ -62,6 +36,11 @@ public class MinIoUtil {
     @Resource
     public void setMinioClient(MinioClient minioClient) {
         MinIoUtil.MINIO_CLIENT = minioClient;
+    }
+
+    @Resource
+    public void setMinioProperties(MinioProperties minioProperties) {
+        MinIoUtil.minioProperties = minioProperties;
     }
 
     /**
@@ -73,7 +52,10 @@ public class MinIoUtil {
         if (Objects.isNull(MINIO_CLIENT)) {
             synchronized (MinIoUtil.class) {
                 if (Objects.isNull(MINIO_CLIENT)) {
-                    MINIO_CLIENT = new MinioClient(endpoint, port, accessKey, secretKey);
+                    MINIO_CLIENT = new MinioClient(minioProperties.getEndpoint(),
+                            minioProperties.getPort(),
+                            minioProperties.getAccessKey(),
+                            minioProperties.getSecretKey());
                 }
             }
         }
