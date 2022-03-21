@@ -26,7 +26,7 @@ import static __package__.common.minio.constant.MimeConstant.*;
 @Component
 public class MinIoUtil {
 
-    private static MinioClient MINIO_CLIENT;
+    private volatile static MinioClient MINIO_CLIENT;
 
     private static String endpoint;
 
