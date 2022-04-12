@@ -2,7 +2,6 @@ package __package__.common.mybatisplus.handler.reference;
 
 import __package__.common.base.util.ReflectUtil;
 import __package__.common.mybatisplus.exception.ReferenceException;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
