@@ -1,4 +1,4 @@
-package __package__.common.mybatisplus.handler;
+package __package__.common.mybatisplus.handler.meta;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class MetaHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
+        System.out.println(metaObject.getOriginalObject());
         this.setFieldValByName("gmt_create", LocalDateTime.now(), metaObject);
         this.setFieldValByName("gmt_modified", LocalDateTime.now(), metaObject);
     }

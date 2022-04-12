@@ -1,13 +1,15 @@
 package __package__.common.mybatisplus;
 
-import __package__.common.mybatisplus.handler.MetaHandler;
+import __package__.common.mybatisplus.handler.meta.MetaHandler;
+import __package__.common.mybatisplus.handler.reference.ReferenceHandler;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Mr_W
@@ -15,8 +17,8 @@ import org.springframework.context.annotation.ComponentScan;
  * @description 基础服务配置
  */
 
+@Configuration
 @ComponentScan
-@EnableAutoConfiguration
 public class CommonMybatisPlusAutoConfiguration {
 
     /**
@@ -48,6 +50,12 @@ public class CommonMybatisPlusAutoConfiguration {
     @Bean
     public MetaHandler metaHandler() {
         return new MetaHandler();
+    }
+
+    @Bean
+    @ConditionalOnClass(name = "__package__.common.base.CommonBaseAutoConfiguration")
+    public ReferenceHandler referenceHandler() {
+        return new ReferenceHandler();
     }
 
 }
