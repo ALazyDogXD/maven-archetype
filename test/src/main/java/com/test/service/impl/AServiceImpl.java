@@ -19,9 +19,9 @@ public class AServiceImpl extends ServiceImpl<AMapper, A> implements AService, C
 
     @Override
     public void run(String... args) {
-//        save(new A() {{
-//            setId(1);
-//            setTest("1q21");
-//        }});
+        save(new A() {{
+            setId(3);
+            setTest("1q2dc1");
+        }});
     }
 }

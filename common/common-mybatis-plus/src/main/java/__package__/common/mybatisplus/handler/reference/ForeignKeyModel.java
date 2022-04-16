@@ -7,6 +7,8 @@ package __package__.common.mybatisplus.handler.reference;
  */
 
 public enum ForeignKeyModel {
+    // 置空
+    SET_NULL,
     // 级联
     CASCADE,
     // 严格

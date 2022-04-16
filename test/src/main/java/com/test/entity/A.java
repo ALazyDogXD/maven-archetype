@@ -11,7 +11,7 @@ import java.util.List;
  * @description a
  */
 
-public class A/* implements Referable<A>*/ {
+public class A implements Referable<A> {
 
     private Integer id;
 
@@ -33,10 +33,10 @@ public class A/* implements Referable<A>*/ {
         this.test = test;
     }
 
-    /*@Override
+    @Override
     public List<ForeignKey<?, A, ?>> refer() {
-        return createBuilderOfReference()
+        return createBuilderOfReference().setEntityClass(A.class)
                 .add(A::getId, B.class, B::getId)
                 .build();
-    }*/
+    }
 }

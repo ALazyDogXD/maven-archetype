@@ -1,5 +1,6 @@
 package __package__.common.mybatisplus.handler.reference;
 
+import __package__.common.mybatisplus.exception.ReferenceException;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 
 import java.util.ArrayList;
@@ -15,17 +16,31 @@ public class ForeignKeyBuilder<S extends Referable<S>> {
 
     private final List<ForeignKey<?, S, ?>> foreignKeys = new ArrayList<>();
 
+    private Class<S> sClass;
+
     ForeignKeyBuilder() {
     }
 
+    public ForeignKeyBuilder<S> setEntityClass(Class<S> sClass) {
+        this.sClass = sClass;
+        return this;
+    }
+
     public <M, T> ForeignKeyBuilder<S> add(SFunction<S, T> s, Class<M> mClass, SFunction<M, T> m) {
-        foreignKeys.add(ForeignKey.create(s, mClass, m));
+        foreignKeys.add(createForeignKey(s, mClass, m));
         return this;
     }
 
     public <M, T> ForeignKeyBuilder<S> add(SFunction<S, T> s, Class<M> mClass, SFunction<M, T> m, ForeignKeyModel deleteModel, ForeignKeyModel updateModel) {
-        foreignKeys.add(ForeignKey.create(s, mClass, m).modify(deleteModel, updateModel));
+        foreignKeys.add(createForeignKey(s, mClass, m).modify(deleteModel, updateModel));
         return this;
+    }
+
+    private <M, T> ForeignKey<M, S, T> createForeignKey(SFunction<S, T> s, Class<M> mClass, SFunction<M, T> m) {
+        if (sClass == null) {
+            throw new ReferenceException("请先设置 entityClass");
+        }
+        return ForeignKey.create(sClass, s, mClass, m);
     }
 
     public List<ForeignKey<?, S, ?>> build() {

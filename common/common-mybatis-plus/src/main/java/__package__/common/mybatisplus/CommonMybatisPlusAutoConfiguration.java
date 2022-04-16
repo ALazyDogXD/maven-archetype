@@ -2,6 +2,7 @@ package __package__.common.mybatisplus;
 
 import __package__.common.mybatisplus.handler.meta.MetaHandler;
 import __package__.common.mybatisplus.handler.reference.ReferenceHandler;
+import __package__.common.mybatisplus.handler.reference.ReferenceInterceptor;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
@@ -37,6 +38,7 @@ public class CommonMybatisPlusAutoConfiguration {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+        interceptor.addInnerInterceptor(new ReferenceInterceptor());
         return interceptor;
     }
 
