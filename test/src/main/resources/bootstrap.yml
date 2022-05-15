@@ -6,6 +6,20 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  freemarker:
+    allow-request-override: false
+    #    开发过程建议关闭缓存
+    cache: false
+    check-template-location: false
+    charset: UTF-8
+    content-type: text/html; charset=utf-8
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    request-context-attribute:
+    # 默认后缀就是.ftl
+    suffix: .xml
+    template-loader-path: classPath:/templates/code/
 
 mybatis-plus:
   configuration:

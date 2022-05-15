@@ -1,6 +1,5 @@
 package __package__.common.knife4j;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
@@ -13,6 +12,5 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @SuppressWarnings("SpellCheckingInspection")
 @ComponentScan
 @EnableSwagger2WebMvc
-@EnableAutoConfiguration
 public class CommonKnife4jAutoConfiguration {
 }

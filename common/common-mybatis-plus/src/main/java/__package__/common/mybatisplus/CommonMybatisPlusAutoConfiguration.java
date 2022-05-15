@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Mr_W
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
  * @description 基础服务配置
  */
 
-@Configuration
 @ComponentScan
 public class CommonMybatisPlusAutoConfiguration {
 

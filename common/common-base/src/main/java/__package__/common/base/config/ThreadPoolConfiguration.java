@@ -11,7 +11,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  *
  * @author Mr_W
  */
-@SuppressWarnings("SpringFacetCodeInspection")
 @Configuration
 public class ThreadPoolConfiguration {
 

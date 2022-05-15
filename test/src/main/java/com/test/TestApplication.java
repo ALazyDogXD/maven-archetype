@@ -1,8 +1,10 @@
 package com.test;
 
+import com.test.test.TestImportSelector;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author ALazyDogXD
@@ -10,10 +12,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description
  */
 
-@MapperScan
+@MapperScan("com.test.mapper")
 @SpringBootApplication
+@Import(TestImportSelector.class)
 public class TestApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TestApplication.class, args);
     }
