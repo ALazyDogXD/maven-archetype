@@ -5,7 +5,6 @@ import io.minio.MinioClient;
 import io.minio.errors.InvalidEndpointException;
 import io.minio.errors.InvalidPortException;
 import org.slf4j.Logger;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,7 +18,6 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 
 @ComponentScan
-@EnableAutoConfiguration
 @EnableConfigurationProperties
 public class CommonMinioAutoConfiguration {
 
