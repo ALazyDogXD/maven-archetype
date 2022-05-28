@@ -1,6 +1,6 @@
 package com.test.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import __package__.common.mybatisplus.service.impl.ReferenceServiceImpl;
 import com.test.entity.A;
 import com.test.mapper.AMapper;
 import com.test.service.AService;
@@ -15,11 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class AServiceImpl extends ServiceImpl<AMapper, A> implements AService, CommandLineRunner {
+public class AServiceImpl extends ReferenceServiceImpl<AMapper, A> implements AService, CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        save(new A() {{
+        boolean b = saveWithCheckReference(new A() {{
             setId(3);
             setTest("1q2dc1");
         }});

@@ -1,6 +1,6 @@
 package com.test.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import __package__.common.mybatisplus.service.impl.ReferenceServiceImpl;
 import com.test.entity.B;
 import com.test.mapper.BMapper;
 import com.test.service.BService;
@@ -15,5 +15,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class BServiceImpl extends ServiceImpl<BMapper, B> implements BService {
+public class BServiceImpl extends ReferenceServiceImpl<BMapper, B> implements BService {
 }

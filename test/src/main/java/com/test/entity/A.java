@@ -1,7 +1,7 @@
 package com.test.entity;
 
-import __package__.common.mybatisplus.handler.reference.ForeignKey;
-import __package__.common.mybatisplus.handler.reference.Referable;
+import __package__.common.mybatisplus.reference.ForeignKey;
+import __package__.common.mybatisplus.reference.Referable;
 
 import java.util.List;
 

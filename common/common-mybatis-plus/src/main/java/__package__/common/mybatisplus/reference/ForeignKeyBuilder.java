@@ -1,4 +1,4 @@
-package __package__.common.mybatisplus.handler.reference;
+package __package__.common.mybatisplus.reference;
 
 import __package__.common.mybatisplus.exception.ReferenceException;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;

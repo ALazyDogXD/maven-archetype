@@ -1,13 +1,12 @@
 package __package__.common.mybatisplus;
 
-import __package__.common.mybatisplus.handler.meta.MetaHandler;
-import __package__.common.mybatisplus.handler.reference.ReferenceHandler;
-import __package__.common.mybatisplus.handler.reference.ReferenceInterceptor;
+import __package__.common.mybatisplus.handler.MetaHandler;
+import __package__.common.mybatisplus.reference.sql.ReferenceContext;
+import __package__.common.mybatisplus.reference.sql.ReferenceSqlInjector;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
  * @description 基础服务配置
  */
 
-@Configuration
 @ComponentScan
 public class CommonMybatisPlusAutoConfiguration {
 
@@ -38,7 +36,7 @@ public class CommonMybatisPlusAutoConfiguration {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
-        interceptor.addInnerInterceptor(new ReferenceInterceptor());
+//        interceptor.addInnerInterceptor(new ReferenceInterceptor());
         return interceptor;
     }
 
@@ -54,10 +52,15 @@ public class CommonMybatisPlusAutoConfiguration {
         return new MetaHandler();
     }
 
+//    @Bean
+//    @ConditionalOnClass(name = "__package__.common.base.CommonBaseAutoConfiguration")
+//    public ReferenceHandler referenceHandler() {
+//        return new ReferenceHandler();
+//    }
+
     @Bean
-    @ConditionalOnClass(name = "__package__.common.base.CommonBaseAutoConfiguration")
-    public ReferenceHandler referenceHandler() {
-        return new ReferenceHandler();
+    public ReferenceSqlInjector referenceSqlInjector() {
+        return new ReferenceSqlInjector();
     }
 
 }
