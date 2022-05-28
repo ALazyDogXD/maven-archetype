@@ -9,5 +9,5 @@ import com.test.entity.A;
  * @description a
  */
 
-public interface AService {
+public interface AService extends IService<A> {
 }
