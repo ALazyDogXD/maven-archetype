@@ -1,4 +1,4 @@
-package __package__.common.mybatisplus.handler.meta;
+package __package__.common.mybatisplus.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

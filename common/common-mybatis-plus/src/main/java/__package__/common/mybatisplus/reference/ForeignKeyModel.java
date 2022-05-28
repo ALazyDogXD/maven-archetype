@@ -1,4 +1,4 @@
-package __package__.common.mybatisplus.handler.reference;
+package __package__.common.mybatisplus.reference;
 
 /**
  * @author ALazyDogXD

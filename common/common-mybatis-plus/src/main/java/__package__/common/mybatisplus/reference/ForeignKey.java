@@ -1,4 +1,4 @@
-package __package__.common.mybatisplus.handler.reference;
+package __package__.common.mybatisplus.reference;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.function.Function;
 
-import static __package__.common.mybatisplus.handler.reference.ForeignKeyModel.RESTRICT;
+import static __package__.common.mybatisplus.reference.ForeignKeyModel.RESTRICT;
 
 /**
  * @author ALazyDogXD
@@ -103,6 +103,12 @@ public class ForeignKey<M, S extends Referable<S>, T> {
         String segment = wrapper.getSqlSegment();
         String replace = StringUtils.replace(segment, segment.substring(segment.indexOf("#{"), segment.indexOf("}") + 1), getSlaveValue(s).toString());
         return "SELECT " + wrapper.getSqlSelect() + " FROM " + mTableName + " WHERE " + replace;
+    }
+
+    public String getMainSelectSql() {
+        String mSqlSelect = new LambdaQueryWrapper<M>().select(m).getSqlSelect();
+        String sSqlSelect = new LambdaQueryWrapper<S>().select(s).getSqlSelect();
+        return "SELECT " + mSqlSelect + " FROM " + mTableName + " WHERE " + mSqlSelect + " = #{" + sSqlSelect + "}";
     }
 
 }

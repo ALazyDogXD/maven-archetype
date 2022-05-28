@@ -2,9 +2,9 @@ spring:
   application:
     name: test
   datasource:
-    url: jdbc:mysql://192.168.1.166:3306/test?serverTimezone=GMT%2B8
+    url: jdbc:mysql://47.242.192.239:3306/test?serverTimezone=GMT%2B8
     username: root
-    password: 123456
+    password: 123654
     driver-class-name: com.mysql.cj.jdbc.Driver
   freemarker:
     allow-request-override: false

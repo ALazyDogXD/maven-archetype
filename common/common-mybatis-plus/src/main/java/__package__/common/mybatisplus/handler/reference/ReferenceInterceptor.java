@@ -10,6 +10,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 
 /**
  * @author ALazyDogXD

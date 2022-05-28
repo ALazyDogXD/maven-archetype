@@ -1,6 +1,6 @@
 package com.test.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import __package__.common.mybatisplus.mapper.ReferenceMapper;
 import com.test.entity.A;
 
 /**
@@ -9,5 +9,5 @@ import com.test.entity.A;
  * @description a
  */
 
-public interface AMapper extends BaseMapper<A> {
+public interface AMapper extends ReferenceMapper<A> {
 }
