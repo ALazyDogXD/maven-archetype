@@ -2,6 +2,7 @@ package com.test.entity;
 
 import __package__.common.mybatisplus.reference.ForeignKey;
 import __package__.common.mybatisplus.reference.Referable;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 
 import java.util.List;
 

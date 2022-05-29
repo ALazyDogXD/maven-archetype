@@ -6,9 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author ALazyDogXD
  * @date 2022/4/11 13:48

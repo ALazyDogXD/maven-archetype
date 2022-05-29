@@ -1,13 +1,18 @@
 package __package__.common.mybatisplus.reference;
 
+import __package__.common.mybatisplus.enums.ForeignKeyModel;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.core.toolkit.support.SerializedLambda;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import org.springframework.util.StringUtils;
+import org.apache.ibatis.session.Configuration;
 
-import java.util.function.Function;
-
-import static __package__.common.mybatisplus.reference.ForeignKeyModel.RESTRICT;
+import static __package__.common.mybatisplus.enums.ForeignKeyModel.RESTRICT;
 
 /**
  * @author ALazyDogXD
@@ -21,6 +26,8 @@ public class ForeignKey<M, S extends Referable<S>, T> {
 
     private Class<M> mClass;
 
+    private volatile String mFieldName;
+
     private SFunction<M, T> m;
 
     private SFunction<S, T> s;
@@ -29,22 +36,37 @@ public class ForeignKey<M, S extends Referable<S>, T> {
 
     private ForeignKeyModel updateModel = RESTRICT;
 
-    private String sTableName;
+    private volatile String sTableName;
 
-    private String mTableName;
+    private volatile String mTableName;
 
     static <M, S extends Referable<S>, T> ForeignKey<M, S, T> create(Class<S> sClass, SFunction<S, T> s, Class<M> mClass, SFunction<M, T> m) {
         ForeignKey<M, S, T> foreignKey = new ForeignKey<>();
         foreignKey.s = s;
         foreignKey.m = m;
         foreignKey.sClass = sClass;
-        foreignKey.sTableName = SqlHelper.table(sClass).getTableName();
         foreignKey.mClass = mClass;
         return foreignKey;
     }
 
-    public void initMainTable() {
-        mTableName = SqlHelper.table(mClass).getTableName();
+    public void initMainTable(GlobalConfig.DbConfig dbConfig) {
+        if (mTableName == null) {
+            synchronized (this) {
+                if (mTableName == null) {
+                    mTableName = initTableName(dbConfig, mClass);
+                }
+            }
+        }
+    }
+
+    public void initSlaveTable() {
+        if (sTableName == null) {
+            synchronized (this) {
+                if (sTableName == null) {
+                    sTableName = SqlHelper.table(sClass).getTableName();
+                }
+            }
+        }
     }
 
     public ForeignKey<M, S, T> modify(ForeignKeyModel deleteModel, ForeignKeyModel updateModel) {
@@ -57,58 +79,113 @@ public class ForeignKey<M, S extends Referable<S>, T> {
         return this;
     }
 
-    public T getSlaveValue(Object s) {
-        if (sClass.isAssignableFrom(s.getClass())) {
-            //noinspection unchecked
-            return this.s.apply((S) s);
-        } else {
-            throw new ClassCastException("传入类型" + s.getClass() + "与" + sClass + "不符");
-        }
-    }
-
-    public T getMainValue(Object m) {
-        if (mClass.isAssignableFrom(m.getClass())) {
-            //noinspection unchecked
-            return this.m.apply((M) m);
-        } else {
-            throw new ClassCastException("传入类型" + m.getClass() + "与" + mClass + "不符");
-        }
-    }
-
-    public Function<M, T> getMainFields() {
-        return m;
-    }
-
     public Class<M> getMainClass() {
         return mClass;
     }
 
-    public ForeignKeyModel getDeleteModel() {
-        return deleteModel;
+    public boolean isUpdateModel(ForeignKeyModel model) {
+        return updateModel.equals(model);
     }
 
-    public ForeignKeyModel getUpdateModel() {
-        return updateModel;
+    public boolean isDeleteModel(ForeignKeyModel model) {
+        return deleteModel.equals(model);
     }
 
-    public String getSlaveSelectSql(Object m) {
-        LambdaQueryWrapper<S> wrapper = new LambdaQueryWrapper<S>().select(s).eq(s, getMainValue(m));
-        String segment = wrapper.getSqlSegment();
-        String replace = StringUtils.replace(segment, segment.substring(segment.indexOf("#{"), segment.indexOf("}") + 1), getSlaveValue(m).toString());
-        return "SELECT " + wrapper.getSqlSelect() + " FROM " + sTableName + " WHERE " + replace;
-    }
-
-    public String getMainSelectSql(Object s) {
-        LambdaQueryWrapper<M> wrapper = new LambdaQueryWrapper<M>().select(m).eq(m, getSlaveValue(s));
-        String segment = wrapper.getSqlSegment();
-        String replace = StringUtils.replace(segment, segment.substring(segment.indexOf("#{"), segment.indexOf("}") + 1), getSlaveValue(s).toString());
-        return "SELECT " + wrapper.getSqlSelect() + " FROM " + mTableName + " WHERE " + replace;
-    }
-
-    public String getMainSelectSql() {
-        String mSqlSelect = new LambdaQueryWrapper<M>().select(m).getSqlSelect();
+    public String getSlaveCheckSelectSql(Configuration configuration) {
+        initSlaveTable();
+        initMainTableInfo(configuration);
         String sSqlSelect = new LambdaQueryWrapper<S>().select(s).getSqlSelect();
-        return "SELECT " + mSqlSelect + " FROM " + mTableName + " WHERE " + mSqlSelect + " = #{" + sSqlSelect + "}";
+        return "SELECT '" + sTableName + "' table_name FROM " + sTableName + " WHERE " + sSqlSelect + " = #{" + mFieldName + "} HAVING COUNT(" + sSqlSelect + ") = 0";
+    }
+
+    public String getMainCheckSelectSql(Configuration configuration) {
+        initMainTableInfo(configuration);
+        String sSqlSelect = new LambdaQueryWrapper<S>().select(s).getSqlSelect();
+        return "SELECT '" + mTableName + "' table_name FROM " + mTableName + " WHERE " + mFieldName + " = #{" + sSqlSelect + "} HAVING COUNT(" + mFieldName + ") = 0";
+    }
+
+    public String getSlaveSelectSql(Configuration configuration) {
+        initSlaveTable();
+        initMainTableInfo(configuration);
+        String sSqlSelect = new LambdaQueryWrapper<S>().select(s).getSqlSelect();
+        return "SELECT " + sSqlSelect + " FROM " + sTableName + " WHERE " + sSqlSelect + " = #{" + mFieldName + "}";
+    }
+
+    public String getMainSelectSql(Configuration configuration) {
+        initMainTableInfo(configuration);
+        String sSqlSelect = new LambdaQueryWrapper<S>().select(s).getSqlSelect();
+        return "SELECT " + mFieldName + " FROM " + mTableName + " WHERE " + mFieldName + " = #{" + sSqlSelect + "}";
+    }
+
+    private void initMainTableInfo(Configuration configuration) {
+        GlobalConfig.DbConfig dbConfig = GlobalConfigUtils.getGlobalConfig(configuration).getDbConfig();
+        initMainTable(dbConfig);
+        initMainFieldName(configuration);
+    }
+
+    private String initTableName(GlobalConfig.DbConfig dbConfig, Class<?> clazz) {
+        TableName table = clazz.getAnnotation(TableName.class);
+
+        String tableName = clazz.getSimpleName();
+        String tablePrefix = dbConfig.getTablePrefix();
+        String schema = dbConfig.getSchema();
+        boolean tablePrefixEffect = true;
+
+        if (table != null) {
+            if (StringUtils.isNotBlank(table.value())) {
+                tableName = table.value();
+                if (StringUtils.isNotBlank(tablePrefix) && !table.keepGlobalPrefix()) {
+                    tablePrefixEffect = false;
+                }
+            } else {
+                tableName = initTableNameWithDbConfig(tableName, dbConfig);
+            }
+            if (StringUtils.isNotBlank(table.schema())) {
+                schema = table.schema();
+            }
+        } else {
+            tableName = initTableNameWithDbConfig(tableName, dbConfig);
+        }
+
+        String targetTableName = tableName;
+        if (StringUtils.isNotBlank(tablePrefix) && tablePrefixEffect) {
+            targetTableName = tablePrefix + targetTableName;
+        }
+        if (StringUtils.isNotBlank(schema)) {
+            targetTableName = schema + StringPool.DOT + targetTableName;
+        }
+
+        return targetTableName;
+    }
+
+    private String initTableNameWithDbConfig(String className, GlobalConfig.DbConfig dbConfig) {
+        String tableName = className;
+        // 开启表名下划线申明
+        if (dbConfig.isTableUnderline()) {
+            tableName = StringUtils.camelToUnderline(tableName);
+        }
+        // 大写命名判断
+        if (dbConfig.isCapitalMode()) {
+            tableName = tableName.toUpperCase();
+        } else {
+            // 首字母小写
+            tableName = StringUtils.firstToLowerCase(tableName);
+        }
+        return tableName;
+    }
+
+    private void initMainFieldName(Configuration configuration) {
+        if (mFieldName == null) {
+            synchronized (this) {
+                if (mFieldName == null) {
+                    mFieldName = SerializedLambda.resolve(m).getImplMethodName().replace("get", "");
+                    mFieldName = StringUtils.firstToLowerCase(mFieldName);
+                    if (configuration.isMapUnderscoreToCamelCase()) {
+                        mFieldName = StringUtils.camelToUnderline(mFieldName);
+                    }
+                }
+            }
+        }
     }
 
 }

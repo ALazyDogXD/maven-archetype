@@ -3,6 +3,7 @@ package __package__.common.mybatisplus.reference.sql;
 import __package__.common.mybatisplus.reference.ForeignKey;
 import __package__.common.mybatisplus.reference.Referable;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -17,7 +18,8 @@ import org.apache.ibatis.mapping.SqlSource;
 
 import java.util.List;
 
-import static __package__.common.mybatisplus.constant.Constant.SAVE_WITH_CHECK_REFERENCE;
+import static __package__.common.mybatisplus.enums.ReferenceMethod.SAVE_WITH_CHECK_REFERENCE;
+import static com.baomidou.mybatisplus.core.enums.SqlKeyword.EXISTS;
 
 /**
  * @author alazydogxd
@@ -25,15 +27,10 @@ import static __package__.common.mybatisplus.constant.Constant.SAVE_WITH_CHECK_R
  * @description 插入 + 外键检测
  */
 public class SaveWithCheckReference extends AbstractMethod {
-    // INSERT INTO test (id, name)
-    // SELECT * FROM (SELECT 4 id,  2 name) test
-    // WHERE
-    // EXISTS(SELECT count(*) FROM test WHERE id = 3) AND
-    // EXISTS(SELECT count(*) FROM test WHERE id = 3)
+
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-        //                                 t f         fw               fv  t  r
-        String sql = "<script>INSERT INTO %s %s SELECT %s FROM (SELECT %s) %s %s</script>";
+        String sql = SAVE_WITH_CHECK_REFERENCE.getSql();
         String fieldSql = prepareFieldSql(tableInfo);
         String fieldWithoutBracketSql = prepareFieldWithoutBracketSql(tableInfo);
         String fieldWithValueSql = prepareFieldWithValueSql(tableInfo);
@@ -59,13 +56,13 @@ public class SaveWithCheckReference extends AbstractMethod {
                 keyColumn = tableInfo.getKeyColumn();
             } else {
                 if (null != tableInfo.getKeySequence()) {
-                    keyGenerator = TableInfoHelper.genKeyGenerator(SAVE_WITH_CHECK_REFERENCE, tableInfo, builderAssistant);
+                    keyGenerator = TableInfoHelper.genKeyGenerator(SAVE_WITH_CHECK_REFERENCE.getMethod(), tableInfo, builderAssistant);
                     keyProperty = tableInfo.getKeyProperty();
                     keyColumn = tableInfo.getKeyColumn();
                 }
             }
         }
-        return addInsertMappedStatement(mapperClass, modelClass, SAVE_WITH_CHECK_REFERENCE, sqlSource, keyGenerator, keyProperty, keyColumn);
+        return addInsertMappedStatement(mapperClass, modelClass, SAVE_WITH_CHECK_REFERENCE.getMethod(), sqlSource, keyGenerator, keyProperty, keyColumn);
     }
 
     private String prepareFieldSql(TableInfo tableInfo) {
@@ -93,16 +90,19 @@ public class SaveWithCheckReference extends AbstractMethod {
     private String prepareReferenceCheckSql(TableInfo tableInfo) {
         StringBuilder referenceCheckSql = new StringBuilder();
         List<? extends ForeignKey<?, ? extends Referable<?>, ?>> slaveForeignKeys = ReferenceContext.getSlaveForeignKeys(tableInfo.getEntityType());
-        // 无引用, 不做外键判断
-        if (slaveForeignKeys.isEmpty()) return "";
+        // 无引用, 不做约束判断
+        if (slaveForeignKeys.isEmpty()) {
+            return "";
+        }
         for (ForeignKey<?, ? extends Referable<?>, ?> foreignKey : slaveForeignKeys) {
             referenceCheckSql
-                    .append("EXISTS(")
-                    .append(foreignKey.getMainSelectSql())
-                    .append(") AND ");
+                    .append(EXISTS).append(LEFT_BRACKET)
+                    .append(foreignKey.getMainSelectSql(configuration))
+                    .append(RIGHT_BRACKET).append(SPACE)
+                    .append(SqlKeyword.AND).append(SPACE);
         }
         return SqlScriptUtils.convertTrim(referenceCheckSql.toString(),
-                "WHERE",
-                null, null, "AND");
+                WHERE,
+                null, null, SqlKeyword.AND.getSqlSegment());
     }
 }

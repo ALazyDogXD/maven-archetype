@@ -1,5 +1,7 @@
 package __package__.common.mybatisplus.reference;
 
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+
 import java.util.List;
 
 /**

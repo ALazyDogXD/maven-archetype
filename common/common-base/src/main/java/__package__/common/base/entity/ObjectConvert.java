@@ -11,24 +11,26 @@ import java.lang.reflect.ParameterizedType;
  * @author Mr_W
  * 对象转换
  */
-public class ObjectConvert<T> {
+public interface ObjectConvert<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ObjectConvert.class);
+    Logger LOGGER = LoggerFactory.getLogger(ObjectConvert.class);
 
-    protected void beforeConvert() {
+    default void beforeConvert() {
     }
 
-    protected void beforeConvert(T t) {
+    default void beforeConvert(T t) {
     }
 
-    protected void afterConvert(T t) {
+    default void afterConvert(T t) {
     }
 
-    public T convert() {
+    @SuppressWarnings("unchecked")
+    default T convert() {
         T t;
         beforeConvert();
         try {
-            t = newInstance();
+            Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            t = ClassUtil.createInstance(clazz, false);
             BeanUtils.copyProperties(this, t);
             LOGGER.debug("source: {} -> target :{}", this, t);
         } catch (Exception e) {
@@ -38,7 +40,7 @@ public class ObjectConvert<T> {
         return t;
     }
 
-    public Object convert(T t) {
+    default Object convert(T t) {
         beforeConvert(t);
         try {
             BeanUtils.copyProperties(t, this);
@@ -48,12 +50,6 @@ public class ObjectConvert<T> {
         }
         afterConvert(t);
         return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected T newInstance() {
-        Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        return ClassUtil.createInstance(clazz, false);
     }
 
 }

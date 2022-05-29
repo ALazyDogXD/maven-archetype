@@ -7,14 +7,7 @@ import __package__.common.mybatisplus.reference.ForeignKey;
 import __package__.common.mybatisplus.reference.Referable;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ResourceLoaderAware;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -22,14 +15,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNullApi;
-import org.springframework.lang.NonNullFields;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.SystemPropertyUtils;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -48,9 +35,11 @@ public class ReferenceSqlInjector extends DefaultSqlInjector implements Resource
     public List<AbstractMethod> getMethodList(Class<?> mapperClass) {
         List<AbstractMethod> methodList = super.getMethodList(mapperClass);
         methodList.add(new SaveWithCheckReference());
+        methodList.add(new CheckMasterReference());
         return methodList;
     }
 
+    @Override
     public void setResourceLoader(@NonNull ResourceLoader resourceLoader) {
 //        ClassPathScanningCandidateComponentProvider classPathScanningCandidateComponentProvider = new ClassPathScanningCandidateComponentProvider(false);
 //        classPathScanningCandidateComponentProvider.setResourceLoader(resourceLoader);
@@ -61,22 +50,23 @@ public class ReferenceSqlInjector extends DefaultSqlInjector implements Resource
         PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
         ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(pathMatchingResourcePatternResolver);
         CachingMetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(pathMatchingResourcePatternResolver);
-        String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
-//                .concat(ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders("")))
-                .concat("/**/*.class");
+        String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX.concat("/**/*.class");
         try {
+            // TODO 加载时间待优化, 不要扫描全包
             for (Resource resource : resolver.getResources(packageSearchPath)) {
                 if (resource.isReadable()) {
                     try {
                         MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                         String className = metadataReader.getClassMetadata().getClassName();
-                        if (!className.contains("$") && !className.contains("-")) {
+
+                        if (Arrays.stream(metadataReader.getClassMetadata().getInterfaceNames()).anyMatch(i -> i.equals(ReferenceMapper.class.getName()))) {
                             Class<?> aClass = Class.forName(className);
-                            if (ReferenceMapper.class.isAssignableFrom(aClass) && aClass != ReferenceMapper.class)
+                            if (ReferenceMapper.class.isAssignableFrom(aClass) && aClass != ReferenceMapper.class) {
                                 mapperClasses.add(aClass);
+                            }
                         }
-                    } catch (UnsatisfiedLinkError | ExceptionInInitializerError | IOException | ClassNotFoundException | NoClassDefFoundError e) {
-//                        throw new RuntimeException(e);
+                    } catch (Exception e) {
+                        // 忽略异常
                     }
                 }
             }
@@ -85,21 +75,6 @@ public class ReferenceSqlInjector extends DefaultSqlInjector implements Resource
         }
         if (!mapperClasses.isEmpty()) {
             for (Class<?> mapper : mapperClasses) {
-                // 找到继承 IService 的接口
-//                Class<?> mapperClass = ReflectUtil.getSonInterface(mapper, ReferenceMapper.class);
-//                for (Class<?> i : iService.getClass().getSuperclass().getInterfaces()) {
-////                    if (IService.class.isAssignableFrom(i)) {
-////                        iServiceClass = i;
-////                    }
-//
-//                    if (i.isAssignableFrom(IService.class)) {
-//                        iServiceClass = i;
-//                    }
-//                }
-//                if (iServiceClass == null) {
-//                    continue;
-//                }
-
                 // 收集外键
                 Class<?> entityClass = (Class<?>) ReflectUtil.getInterfaceGenericsType(mapper, ReferenceMapper.class);
                 if (entityClass == null) {
@@ -116,7 +91,6 @@ public class ReferenceSqlInjector extends DefaultSqlInjector implements Resource
                         SLAVE_FOREIGN_KEYS.put(entityClass, foreignKeys);
                         // 收集外键, key 为主表类型
                         for (ForeignKey<?, ? extends Referable<?>, ?> foreignKey : foreignKeys) {
-                            foreignKey.initMainTable();
                             Class<?> mainClass = foreignKey.getMainClass();
                             List<ForeignKey<?, ? extends Referable<?>, ?>> masterForeignKeys;
                             if ((masterForeignKeys = MASTER_FOREIGN_KEYS.get(mainClass)) == null) {

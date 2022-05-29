@@ -19,9 +19,13 @@ public class AServiceImpl extends ReferenceServiceImpl<AMapper, A> implements AS
 
     @Override
     public void run(String... args) {
-        boolean b = saveWithCheckReference(new A() {{
-            setId(3);
-            setTest("1q2dc1");
-        }});
+        try {
+            boolean b = saveWithCheckReference(new A() {{
+                setId(3);
+                setTest("1q2dc1");
+            }});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

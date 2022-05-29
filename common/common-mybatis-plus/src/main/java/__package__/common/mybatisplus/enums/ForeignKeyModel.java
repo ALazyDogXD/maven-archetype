@@ -1,4 +1,4 @@
-package __package__.common.mybatisplus.reference;
+package __package__.common.mybatisplus.enums;
 
 /**
  * @author ALazyDogXD
