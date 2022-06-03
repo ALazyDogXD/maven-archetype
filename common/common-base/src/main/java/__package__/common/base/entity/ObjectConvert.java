@@ -15,15 +15,33 @@ public interface ObjectConvert<T> {
 
     Logger LOGGER = LoggerFactory.getLogger(ObjectConvert.class);
 
+    /**
+     * 对象转换前置处理
+     */
     default void beforeConvert() {
     }
 
+    /**
+     * 对象转换前置处理
+     *
+     * @param t 入参对象 t 转 this
+     */
     default void beforeConvert(T t) {
     }
 
+    /**
+     * 对象转换后置处理
+     *
+     * @param t 入参对像
+     */
     default void afterConvert(T t) {
     }
 
+    /**
+     * 实体转换 this -> t
+     *
+     * @return t
+     */
     @SuppressWarnings("unchecked")
     default T convert() {
         T t;
@@ -40,6 +58,12 @@ public interface ObjectConvert<T> {
         return t;
     }
 
+    /**
+     * 实体转换 t -> this
+     *
+     * @param t 入参对象
+     * @return this
+     */
     default Object convert(T t) {
         beforeConvert(t);
         try {
