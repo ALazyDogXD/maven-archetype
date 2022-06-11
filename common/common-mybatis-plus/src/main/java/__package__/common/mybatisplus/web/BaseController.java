@@ -16,10 +16,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * @author Mr_W
- * @date 2021/2/20 18:50
- * @description 基础控制器
+ * @author ALazyDogXD
+ * @date 2022/6/12 0:39
+ * @description 基础 Controller
  */
+
 public class BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
@@ -39,15 +40,42 @@ public class BaseController {
      */
     protected <T> IPage<T> getPage() {
         HttpServletRequest request = getRequest();
-        LOGGER.debug("当前页数: [{}], 每页数量: [{}], 排序字段: [{}], 是否降序: [{}]",
-                request.getParameter(PAGE),
-                request.getParameter(SIZE),
-                request.getParameter(ORDER_BY_COLUMN),
-                request.getParameter(IS_DESC));
         Integer page = toInt(request.getParameter(PAGE));
         Integer size = toInt(request.getParameter(SIZE));
         String orderByColumn = request.getParameter(ORDER_BY_COLUMN);
         Boolean isDesc = toBool(request.getParameter(IS_DESC));
+        return getPage(page, size, orderByColumn, isDesc);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param orderByColumn 排序字段
+     * @param isDesc        是否倒序
+     * @return 分页对象
+     */
+    protected <T> IPage<T> getPage(String orderByColumn, Boolean isDesc) {
+        HttpServletRequest request = getRequest();
+        Integer page = toInt(request.getParameter(PAGE));
+        Integer size = toInt(request.getParameter(SIZE));
+        return getPage(page, size, orderByColumn, isDesc);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param page          当前页
+     * @param size          每页条数
+     * @param orderByColumn 排序字段
+     * @param isDesc        是否倒序
+     * @return 分页对象
+     */
+    protected <T> IPage<T> getPage(Integer page, Integer size, String orderByColumn, Boolean isDesc) {
+        LOGGER.debug("当前页数: [{}], 每页数量: [{}], 排序字段: [{}], 是否降序: [{}]",
+                page,
+                size,
+                orderByColumn,
+                isDesc);
         if (Objects.isNull(page) || Objects.isNull(size)) {
             return new Page<>();
         }
