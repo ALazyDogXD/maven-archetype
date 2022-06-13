@@ -38,7 +38,7 @@ public interface ObjectConvert<T> {
     }
 
     /**
-     * 实体转换 this -> t
+     * 实体转换 DTO -> DO
      *
      * @return t
      */
@@ -59,7 +59,7 @@ public interface ObjectConvert<T> {
     }
 
     /**
-     * 实体转换 t -> this
+     * 实体转换 DO -> VO
      *
      * @param t 入参对象
      * @return this
