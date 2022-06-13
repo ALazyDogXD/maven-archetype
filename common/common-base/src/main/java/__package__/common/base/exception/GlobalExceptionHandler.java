@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartException;
 
 import java.util.List;
 
-import static __package__.common.base.resp.ResponseEnum.ERROR;
+import static __package__.common.base.resp.ResponseStatus.ERROR;
 
 /**
  * @author Mr_W

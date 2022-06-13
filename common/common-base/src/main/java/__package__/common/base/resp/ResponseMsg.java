@@ -2,8 +2,8 @@ package __package__.common.base.resp;
 
 import org.springframework.util.StringUtils;
 
-import static __package__.common.base.resp.ResponseEnum.FAIL;
-import static __package__.common.base.resp.ResponseEnum.SUCCESS;
+import static __package__.common.base.resp.ResponseStatus.FAIL;
+import static __package__.common.base.resp.ResponseStatus.SUCCESS;
 
 /**
  * @author ALazyDogXD
@@ -18,6 +18,10 @@ public class ResponseMsg extends ResponseBase {
     public ResponseMsg(int code, String msg) {
         super.code = code;
         this.msg = msg;
+    }
+
+    public static ResponseMsg judge(boolean isSuccess) {
+        return isSuccess ? success() : fail();
     }
 
     public static ResponseMsg success() {
@@ -46,6 +50,10 @@ public class ResponseMsg extends ResponseBase {
             msg = response.getMsg();
         }
         return resp(code, msg);
+    }
+
+    public static ResponseMsg resp(ResponseStatus status) {
+        return resp(status.getCode(), status.getMsg());
     }
 
     public static ResponseMsg resp(int code, String msg) {

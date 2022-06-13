@@ -6,7 +6,7 @@ package __package__.common.base.resp;
  * @description 响应
  */
 
-public enum ResponseEnum implements Response {
+public enum ResponseStatus implements Response {
     /**
      * 请求成功
      */
@@ -24,7 +24,7 @@ public enum ResponseEnum implements Response {
 
     private final String msg;
 
-    ResponseEnum(int code, String msg) {
+    ResponseStatus(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
