@@ -28,16 +28,16 @@ public class CommonMybatisPlusAutoConfiguration {
     }
 
 
-    /**
-     * 乐观锁插件
-     */
-    @Bean
-    public MybatisPlusInterceptor mybatisPlusInterceptor() {
-        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
-//        interceptor.addInnerInterceptor(new ReferenceInterceptor());
-        return interceptor;
-    }
+//    /**
+//     * 乐观锁插件
+//     */
+//    @Bean
+//    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+//        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+//        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+////        interceptor.addInnerInterceptor(new ReferenceInterceptor());
+//        return interceptor;
+//    }
 
     @Bean
     public GlobalConfig globalConfig(MetaHandler metaHandler) {
