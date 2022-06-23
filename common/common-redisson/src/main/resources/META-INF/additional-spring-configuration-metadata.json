@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "common.redisson.lua",
+      "type": "__package__.common.redisson.config.LuaScriptProperties",
+      "sourceType": "__package__.common.redisson.CommonRedissonAutoConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "common.redisson.lua.script-locations",
+      "type": "java.util.List",
+      "sourceType": "__package__.common.redisson.CommonRedissonAutoConfiguration",
+      "description": "Description for common.redis.lua.script-locations.",
+      "defaultValue": "8000"
+    },
+    {
+      "name": "common.redisson.lua.script",
+      "type": "java.util.Map",
+      "sourceType": "__package__.common.redisson.CommonRedissonAutoConfiguration",
+      "description": "Description for minio.host.",
+      "defaultValue": "http://localhost"
+    }
+  ]
+}

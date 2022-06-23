@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-@ConfigurationProperties("minio")
+@ConfigurationProperties("common.minio")
 public class MinioProperties {
 
     private String endpoint;

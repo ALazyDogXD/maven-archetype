@@ -25,7 +25,7 @@
         <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
         <mysql.version>8.0.21</mysql.version>
         <mybatis-plus.version>3.4.0</mybatis-plus.version>
-        <commons-pool2.version>2.9.0</commons-pool2.version>
+<!--        <commons-pool2.version>2.9.0</commons-pool2.version>-->
         <springfox.version>2.9.2</springfox.version>
         <knife4j.version>2.0.8</knife4j.version>
         <hutool.version>5.7.19</hutool.version>
@@ -34,6 +34,7 @@
         <dubbo.version>3.0.5</dubbo.version>
         <sentinel.dubbo.version>1.8.0</sentinel.dubbo.version>
         <alibaba-sms.version>2.0.9</alibaba-sms.version>
+        <redisson.version>3.17.0</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -117,11 +118,18 @@
                 <version>${knife4j.version}</version>
             </dependency>
 
-            <!-- redis 连接池 -->
+<!--            &lt;!&ndash; redis 连接池 &ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.commons</groupId>-->
+<!--                <artifactId>commons-pool2</artifactId>-->
+<!--                <version>${commons-pool2.version}</version>-->
+<!--            </dependency>-->
+
+            <!-- redisson -->
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${commons-pool2.version}</version>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
 
             <!-- hutool 工具 -->

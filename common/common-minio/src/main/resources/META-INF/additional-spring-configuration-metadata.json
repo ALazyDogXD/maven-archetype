@@ -1,38 +1,38 @@
 {
   "groups": [
     {
-      "name": "minio",
+      "name": "common.minio",
       "type": "__package__.common.minio.CommonMinioAutoConfiguration",
       "sourceType": "__package__.common.minio.CommonMinioAutoConfiguration"
     }
   ],
   "properties": [
     {
-      "name": "minio.port",
+      "name": "common.minio.port",
       "type": "java.lang.String",
       "sourceType": "__package__.common.minio.CommonMinioAutoConfiguration",
-      "description": "Description for minio.port.",
+      "description": "Description for common.minio.port.",
       "defaultValue": "8000"
     },
     {
-      "name": "minio.host",
+      "name": "common.minio.host",
       "type": "java.lang.String",
       "sourceType": "__package__.common.minio.CommonMinioAutoConfiguration",
-      "description": "Description for minio.host.",
+      "description": "Description for common.minio.host.",
       "defaultValue": "http://localhost"
     },
     {
-      "name": "minio.accessKey",
+      "name": "common.minio.accessKey",
       "type": "java.lang.String",
       "sourceType": "__package__.common.minio.CommonMinioAutoConfiguration",
-      "description": "Description for minio.accessKey.",
+      "description": "Description for common.minio.accessKey.",
       "defaultValue": "admin"
     },
     {
-      "name": "minio.secretKey",
+      "name": "common.minio.secretKey",
       "type": "java.lang.String",
       "sourceType": "__package__.common.minio.CommonMinioAutoConfiguration",
-      "description": "Description for minio.secretKey.",
+      "description": "Description for common.minio.secretKey.",
       "defaultValue": "123456"
     }
   ]
