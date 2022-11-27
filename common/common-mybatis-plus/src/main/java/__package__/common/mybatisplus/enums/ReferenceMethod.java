@@ -14,18 +14,18 @@ public enum ReferenceMethod {
     // [SELECT 'master1' FROM master1 WHERE m_id = #{id} HAVING count(m_id) = 0 UNION ALL SELECT 'master2' FROM master2 WHERE m_id = #{id} HAVING count(m_id) = 0 ...]
     CHECK_REFERENCE("checkReference", "检查约束", "<script>%s</script>"),
     // UPDATE FROM [master] [WHERE id = #{id}] [AND EXISTS(SELECT slave.s_id FROM slave WHERE slave.s_id = master.m_id) ...]
-    UPDATE_WITH_CHECK_REFERENCE_RESTRICT("updateWithCheckReference", "更新时检查约束(严格)", "<script>UPDATE FROM %s %s %s</script>");
-//    // DELETE FROM [master] [WHERE EXISTS(SELECT s_id)]
-//    DELETE_WITH_CHECK_REFERENCE_RESTRICT("deleteWithCheckReference", "删除时检查约束(严格)", "<script>DELETE FROM %s %s</script>");
+    UPDATE_WITH_CHECK_REFERENCE_RESTRICT("updateWithCheckReference", "更新时检查约束(严格)", "<script>UPDATE FROM %s %s %s</script>"),
+    // DELETE FROM [master] [WHERE EXISTS(SELECT s_id)]
+    DELETE_WITH_CHECK_REFERENCE_RESTRICT("deleteWithCheckReference", "删除时检查约束(严格)", "<script>DELETE FROM %s %s</script>");
 
     private final String method;
     private final String desc;
-    private final String sql;
+    private final String sqlTemplate;
 
-    ReferenceMethod(String method, String desc, String sql) {
+    ReferenceMethod(String method, String desc, String sqlTemplate) {
         this.method = method;
         this.desc = desc;
-        this.sql = sql;
+        this.sqlTemplate = sqlTemplate;
     }
 
     public String getMethod() {
@@ -36,8 +36,8 @@ public enum ReferenceMethod {
         return desc;
     }
 
-    public String getSql() {
-        return sql;
+    public String getSqlTemplate() {
+        return sqlTemplate;
     }
 
 }

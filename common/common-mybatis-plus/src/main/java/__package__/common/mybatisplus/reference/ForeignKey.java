@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
+import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.core.toolkit.support.SerializedLambda;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.apache.ibatis.session.Configuration;
 
 import static __package__.common.mybatisplus.enums.ForeignKeyModel.RESTRICT;
@@ -32,6 +34,10 @@ public class ForeignKey<M, S extends Referable<S>, T> {
 
     private SFunction<S, T> s;
 
+    private volatile String masterKeyName;
+
+    private volatile String slaveKeyName;
+
     private ForeignKeyModel deleteModel = RESTRICT;
 
     private ForeignKeyModel updateModel = RESTRICT;
@@ -44,6 +50,8 @@ public class ForeignKey<M, S extends Referable<S>, T> {
         ForeignKey<M, S, T> foreignKey = new ForeignKey<>();
         foreignKey.s = s;
         foreignKey.m = m;
+        foreignKey.slaveKeyName = PropertyNamer.methodToProperty(LambdaUtils.resolve(s).getImplMethodName());
+        foreignKey.masterKeyName = PropertyNamer.methodToProperty(LambdaUtils.resolve(m).getImplMethodName());
         foreignKey.sClass = sClass;
         foreignKey.mClass = mClass;
         return foreignKey;
@@ -83,12 +91,20 @@ public class ForeignKey<M, S extends Referable<S>, T> {
         return mClass;
     }
 
-    public boolean isUpdateModel(ForeignKeyModel model) {
-        return updateModel.equals(model);
+    public String getSlaveKeyName() {
+        return slaveKeyName;
     }
 
-    public boolean isDeleteModel(ForeignKeyModel model) {
-        return deleteModel.equals(model);
+    public String getMasterKeyName() {
+        return masterKeyName;
+    }
+
+    public ForeignKeyModel getUpdateModel() {
+        return updateModel;
+    }
+
+    public ForeignKeyModel getDeleteModel() {
+        return deleteModel;
     }
 
     public String getSlaveCheckSelectSql(Configuration configuration) {

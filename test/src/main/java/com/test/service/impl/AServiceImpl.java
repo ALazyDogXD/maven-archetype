@@ -1,6 +1,6 @@
 package com.test.service.impl;
 
-import __package__.common.mybatisplus.service.impl.ReferenceServiceImpl;
+import __package__.common.mybatisplus.reference.sql.ReferenceServiceImpl;
 import com.test.entity.A;
 import com.test.mapper.AMapper;
 import com.test.service.AService;

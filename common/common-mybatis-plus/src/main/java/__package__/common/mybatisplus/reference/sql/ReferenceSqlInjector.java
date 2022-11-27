@@ -36,16 +36,12 @@ public class ReferenceSqlInjector extends DefaultSqlInjector implements Resource
         List<AbstractMethod> methodList = super.getMethodList(mapperClass);
         methodList.add(new SaveWithCheckReference());
         methodList.add(new CheckMasterReference());
+        methodList.add(new DeleteWithCheckReference());
         return methodList;
     }
 
     @Override
     public void setResourceLoader(@NonNull ResourceLoader resourceLoader) {
-//        ClassPathScanningCandidateComponentProvider classPathScanningCandidateComponentProvider = new ClassPathScanningCandidateComponentProvider(false);
-//        classPathScanningCandidateComponentProvider.setResourceLoader(resourceLoader);
-//        classPathScanningCandidateComponentProvider.addIncludeFilter(new AssignableTypeFilter(ReferenceMapper.class));
-//        Set<BeanDefinition> candidateComponents = classPathScanningCandidateComponentProvider.findCandidateComponents("classpath:/");
-//        System.out.println(candidateComponents);
         Set<Class<?>> mapperClasses = new HashSet<>();
         PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
         ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(pathMatchingResourcePatternResolver);

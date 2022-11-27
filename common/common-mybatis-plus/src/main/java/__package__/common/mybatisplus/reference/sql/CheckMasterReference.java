@@ -20,7 +20,7 @@ import static __package__.common.mybatisplus.enums.ReferenceMethod.CHECK_REFEREN
 public class CheckMasterReference extends AbstractMethod {
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-        SqlSource sqlSource = languageDriver.createSqlSource(configuration, String.format(CHECK_REFERENCE.getSql(), prepareCheckSql(tableInfo)), modelClass);
+        SqlSource sqlSource = languageDriver.createSqlSource(configuration, String.format(CHECK_REFERENCE.getSqlTemplate(), prepareCheckSql(tableInfo)), modelClass);
         return this.addSelectMappedStatementForOther(mapperClass, CHECK_REFERENCE.getMethod(), sqlSource, String.class);
     }
 

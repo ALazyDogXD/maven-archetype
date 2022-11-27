@@ -30,20 +30,20 @@ public class SaveWithCheckReference extends AbstractMethod {
 
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-        String sql = SAVE_WITH_CHECK_REFERENCE.getSql();
+        String sqlTemplate = SAVE_WITH_CHECK_REFERENCE.getSqlTemplate();
         String fieldSql = prepareFieldSql(tableInfo);
         String fieldWithoutBracketSql = prepareFieldWithoutBracketSql(tableInfo);
         String fieldWithValueSql = prepareFieldWithValueSql(tableInfo);
         String referenceCheckSql = prepareReferenceCheckSql(tableInfo);
-        String sqlResult = String.format(
-                sql,
+        String sql = String.format(
+                sqlTemplate,
                 tableInfo.getTableName(),
                 fieldSql,
                 fieldWithoutBracketSql,
                 fieldWithValueSql,
                 tableInfo.getTableName(),
                 referenceCheckSql);
-        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
+        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
         KeyGenerator keyGenerator = new NoKeyGenerator();
         String keyProperty = null;
         String keyColumn = null;
